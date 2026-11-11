@@ -1,87 +1,169 @@
-const yesBtn = document.getElementById('yesBtn');
-const noBtn = document.getElementById('noBtn');
-const question = document.getElementById('question');
-const heartContainer = document.getElementById('heartContainer');
-const bgMusic = document.getElementById('bgMusic');
-
-let yesScale = 1;
-let noScale = 1;
-let noShift = 15; 
-let musicStarted = false;
-
-// Reassurance phrases that switch when she hits NO
-const phrases = [
-  "ARE YOU SURE? 🥺",
-  "THINK AGAIN! 👀",
-  "PRETTY PLEASE? 💞",
-  "WRONG BUTTON! ❌",
-  "YOU DON'T MEAN THAT! 😭",
-  "MAYBE RE-READ THE OPTION? 🤔"
-];
-let phraseIndex = 0;
-
-function startMusic() {
-  if (!musicStarted) {
-    bgMusic.play()
-      .then(() => { musicStarted = true; })
-      .catch(error => console.log("Audio playback failed:", error));
-  }
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #ffe6e6 0%, #ffb3c1 100%);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  overflow-x: hidden;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
-noBtn.addEventListener('click', () => {
-  startMusic();
+.container {
+  text-align: center;
+  padding: 35px;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 25px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  max-width: 95%;
+  width: 500px;
+  position: relative;
+}
 
-  // Change title text
-  question.innerHTML = phrases[phraseIndex];
-  phraseIndex = (phraseIndex + 1) % phrases.length;
+.hidden {
+  display: none !important;
+}
 
-  // Grow YES button
-  yesScale += 0.35;
-  yesBtn.style.transform = `scale(${yesScale})`;
-  
-  // Shrink NO button
-  noScale -= 0.12;
-  noBtn.style.transform = `scale(${noScale})`;
-  
-  // Push NO button away to the right so it doesn't get covered
-  if (noShift > 2) {
-    noShift -= 3;
-    noBtn.style.right = `${noShift}%`;
-  }
-  
-  if (noScale <= 0.2) {
-    noBtn.style.display = 'none';
-  }
-});
+#heartContainer {
+  font-size: 4rem;
+  margin-bottom: 10px;
+  animation: pulse 1.2s infinite;
+}
 
-yesBtn.addEventListener('click', () => {
-  startMusic();
+h1 {
+  color: #ff4d6d;
+  font-size: 2rem;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+}
 
-  yesBtn.style.display = 'none';
-  noBtn.style.display = 'none';
-  question.innerHTML = "YAY! ❤️ BEST DECISION EVER!";
-  heartContainer.innerHTML = "🥳🎉💖";
+.buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  height: 180px;
+  width: 100%;
+}
 
-  // Massive continuous confetti celebration
-  var duration = 6 * 1000;
-  var end = Date.now() + duration;
+.buttons button {
+  padding: 15px 40px;
+  font-size: 1.3rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  position: absolute;
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), right 0.2s ease;
+}
 
-  (function frame() {
-    confetti({
-      particleCount: 6,
-      angle: 60,
-      spread: 60,
-      origin: { x: 0, y: 0.8 }
-    });
-    confetti({
-      particleCount: 6,
-      angle: 120,
-      spread: 60,
-      origin: { x: 1, y: 0.8 }
-    });
+#yesBtn {
+  background-color: #4cc9f0;
+  color: white;
+  left: 15%;
+  z-index: 10;
+}
 
-    if (Date.now() < end) {
-      requestAnimationFrame(frame);
-    }
-  }());
-});
+#noBtn {
+  background-color: #ff4d6d;
+  color: white;
+  right: 15%;
+}
+
+/* Application Form Styles */
+.app-title {
+  letter-spacing: 2px;
+  margin-top: 5px;
+}
+
+.subtitle {
+  color: #555;
+  font-size: 0.95rem;
+  margin-bottom: 25px;
+}
+
+.question-item {
+  background: #fff0f3;
+  padding: 15px;
+  border-radius: 15px;
+  margin-bottom: 15px;
+  text-align: left;
+  border: 1px solid #ffccd5;
+}
+
+.question-item p {
+  margin: 0 0 10px 0;
+  font-weight: 600;
+  color: #c9184a;
+}
+
+.radio-group {
+  display: flex;
+  gap: 25px;
+}
+
+.radio-group label {
+  font-weight: bold;
+  color: #333;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+input[type="radio"] {
+  accent-color: #ff4d6d;
+  transform: scale(1.2);
+}
+
+.submit-btn {
+  margin-top: 15px;
+  padding: 15px 35px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  background-color: #ff4d6d;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0 5px 15px rgba(255, 77, 109, 0.3);
+  transition: transform 0.2s;
+}
+
+.submit-btn:hover {
+  transform: scale(1.05);
+}
+
+.final-msg {
+  font-size: 1.2rem;
+  color: #444;
+  line-height: 1.5;
+}
+
+/* Kissing Animations */
+.kiss-animation {
+  font-size: 2.8rem;
+  animation: kissBounce 1.5s infinite ease-in-out;
+}
+
+.big-kiss {
+  font-size: 4rem;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+@keyframes kissBounce {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  25% { transform: scale(1.2) rotate(-8deg); }
+  50% { transform: scale(1.3) rotate(8deg); }
+  75% { transform: scale(1.15) rotate(-4deg); }
+}
