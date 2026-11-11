@@ -5,22 +5,64 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Be My Girlfriend?</title>
   <link rel="stylesheet" href="style.css">
-  <!-- Load the confetti animation library -->
+  <!-- Full Confetti Library Link -->
   <script src="https://jsdelivr.net"></script>
 </head>
 <body>
 
-  <!-- Streaming audio track for "Come Slide" -->
   <audio id="bgMusic" loop>
     <source src="https://mixkit.co" type="audio/mpeg">
   </audio>
 
   <div class="container">
-    <div id="heartContainer">❤️</div>
-    <h1 id="question">WOULD YOU LIKE TO BE MY GIRL FRIEND?</h1>
-    <div class="buttons">
-      <button id="yesBtn">YES</button>
-      <button id="noBtn">NO</button>
+    <!-- STAGE 1: THE PROPOSAL -->
+    <div id="proposalStage">
+      <div id="heartContainer">❤️</div>
+      <h1 id="question">WOULD YOU LIKE TO BE MY GIRL FRIEND?</h1>
+      <div class="buttons">
+        <button id="yesBtn">YES</button>
+        <button id="noBtn">NO</button>
+      </div>
+    </div>
+
+    <!-- STAGE 2: GIRLFRIEND APLICATION -->
+    <div id="applicationStage" class="hidden">
+      <div class="kiss-animation">💋 😘 💋</div>
+      <h1 class="app-title">GIRLFRIEND APLICATION</h1>
+      <p class="subtitle">Please complete these mandatory terms before we make it official:</p>
+
+      <div class="question-item">
+        <p>1. Do you promise to share your fries with me?</p>
+        <div class="radio-group">
+          <label><input type="radio" name="q1" value="yes" checked> YES</label>
+          <label><input type="radio" name="q1" value="no"> NO</label>
+        </div>
+      </div>
+
+      <div class="question-item">
+        <p>2. Will you let me spoil you and take you on cute dates?</p>
+        <div class="radio-group">
+          <label><input type="radio" name="q2" value="yes" checked> YES</label>
+          <label><input type="radio" name="q2" value="no"> NO</label>
+        </div>
+      </div>
+
+      <div class="question-item">
+        <p>3. Do you accept unlimited hugs and forehead kisses?</p>
+        <div class="radio-group">
+          <label><input type="radio" name="q3" value="yes" checked> YES</label>
+          <label><input type="radio" name="q3" value="no"> NO</label>
+        </div>
+      </div>
+
+      <button id="submitAppBtn" class="submit-btn">SUBMIT APLICATION 💌</button>
+    </div>
+
+    <!-- STAGE 3: FINAL APPROVAL -->
+    <div id="finalStage" class="hidden">
+      <div class="kiss-animation big-kiss">😘💋❤️</div>
+      <h1>APLICATION APPROVED!</h1>
+      <p class="final-msg">You are officially my girlfriend! Screenshot this and send it to me right now. 🥰</p>
     </div>
   </div>
 
