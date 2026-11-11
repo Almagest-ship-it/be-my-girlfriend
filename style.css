@@ -1,77 +1,100 @@
-body {
-  margin: 0;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: linear-gradient(135deg, #ffe6e6 0%, #ffb3c1 100%);
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  overflow: hidden;
+const yesBtn = document.getElementById('yesBtn');
+const noBtn = document.getElementById('noBtn');
+const question = document.getElementById('question');
+const bgMusic = document.getElementById('bgMusic');
+
+const proposalStage = document.getElementById('proposalStage');
+const applicationStage = document.getElementById('applicationStage');
+const finalStage = document.getElementById('finalStage');
+const submitAppBtn = document.getElementById('submitAppBtn');
+
+let yesScale = 1;
+let noScale = 1;
+let noShift = 15;
+let musicStarted = false;
+
+const phrases = [
+  "ARE YOU SURE? 🥺",
+  "THINK AGAIN! 👀",
+  "PRETTY PLEASE? 💞",
+  "WRONG BUTTON! ❌",
+  "YOU DON'T MEAN THAT! 😭",
+  "MAYBE RE-READ THE OPTION? 🤔"
+];
+let phraseIndex = 0;
+
+function startMusic() {
+  if (!musicStarted) {
+    bgMusic.play()
+      .then(() => { musicStarted = true; })
+      .catch(error => console.log("Audio playback failed:", error));
+  }
 }
 
-.container {
-  text-align: center;
-  padding: 40px;
-  background: rgba(255, 255, 255, 0.7);
-  border-radius: 20px;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-  max-width: 90%;
-  width: 500px;
+function fireConfetti(durationSeconds) {
+  const end = Date.now() + (durationSeconds * 1000);
+  (function frame() {
+    confetti({
+      particleCount: 6,
+      angle: 60,
+      spread: 60,
+      origin: { x: 0, y: 0.8 }
+    });
+    confetti({
+      particleCount: 6,
+      angle: 120,
+      spread: 60,
+      origin: { x: 1, y: 0.8 }
+    });
+    if (Date.now() < end) {
+      requestAnimationFrame(frame);
+    }
+  }());
 }
 
-#heartContainer {
-  font-size: 4rem;
-  margin-bottom: 10px;
-  animation: pulse 1.2s infinite;
-}
+noBtn.addEventListener('click', () => {
+  startMusic();
 
-h1 {
-  color: #ff4d6d;
-  font-size: 2.2rem;
-  margin-bottom: 30px;
-  text-transform: uppercase;
-  text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
-  min-height: 80px;
-}
+  question.innerHTML = phrases[phraseIndex];
+  phraseIndex = (phraseIndex + 1) % phrases.length;
 
-.buttons {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  height: 200px;
-  width: 100%;
-}
+  yesScale += 0.35;
+  yesBtn.style.transform = `scale(${yesScale})`;
+  
+  noScale -= 0.12;
+  noBtn.style.transform = `scale(${noScale})`;
+  
+  if (noShift > 2) {
+    noShift -= 3;
+    noBtn.style.right = `${noShift}%`;
+  }
+  
+  if (noScale <= 0.2) {
+    noBtn.style.display = 'none';
+  }
+});
 
-button {
-  padding: 15px 40px;
-  font-size: 1.3rem;
-  font-weight: bold;
-  border: none;
-  border-radius: 50px;
-  cursor: pointer;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-  position: absolute;
-  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), left 0.2s ease, right 0.2s ease;
-}
+// Transition from Proposal to Girlfriend Application
+yesBtn.addEventListener('click', () => {
+  startMusic();
+  proposalStage.classList.add('hidden');
+  applicationStage.classList.remove('hidden');
+  fireConfetti(3);
+});
 
-#yesBtn {
-  background-color: #4cc9f0;
-  color: white;
-  left: 15%;
-  transform-origin: center;
-}
+// Submit Application Form
+submitAppBtn.addEventListener('click', () => {
+  // Check if she selected "no" on any question
+  const q1 = document.querySelector('input[name="q1"]:checked').value;
+  const q2 = document.querySelector('input[name="q2"]:checked').value;
+  const q3 = document.querySelector('input[name="q3"]:checked').value;
 
-#noBtn {
-  background-color: #ff4d6d;
-  color: white;
-  right: 15%;
-  transform-origin: center;
-}
+  if (q1 === 'no' || q2 === 'no' || q3 === 'no') {
+    alert("Nice try! You must select YES on all terms to become my girlfriend! 😘");
+    return;
+  }
 
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.15); }
-  100% { transform: scale(1); }
-}
+  applicationStage.classList.add('hidden');
+  finalStage.classList.remove('hidden');
+  fireConfetti(6);
+});
